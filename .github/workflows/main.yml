@@ -1,4 +1,4 @@
-name: Network Inventory
+name: Inventory
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  inventory:
+  run_inventory:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,10 +14,13 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Run inventory script
-      uses: docker://image-with-inventory-script
+      run: |
+        python inventory-script.py > inventory.txt
+        echo "Inventory results are available in inventory.txt"
 
     - name: Upload results
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
-        name: inventory-results
-        path: path/to/inventory-results
+        name: inventory
+        path: inventory.txt
+

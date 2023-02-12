@@ -1,0 +1,23 @@
+name: Network Inventory
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run inventory script
+      uses: docker://image-with-inventory-script
+
+    - name: Upload results
+      uses: actions/upload-artifact@v1
+      with:
+        name: inventory-results
+        path: path/to/inventory-results

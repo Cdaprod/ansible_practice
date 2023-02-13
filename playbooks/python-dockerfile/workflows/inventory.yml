@@ -1,0 +1,26 @@
+name: Inventory
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run_inventory:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run inventory script
+      run: |
+        python inventory-script.py > inventory.txt
+        echo "Inventory results are available in inventory.txt"
+
+    - name: Upload results
+      uses: actions/upload-artifact@v2
+      with:
+        name: inventory
+        path: inventory.txt
+

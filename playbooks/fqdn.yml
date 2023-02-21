@@ -1,0 +1,24 @@
+---
+- name: Set up FQDN
+  hosts: webserver
+  become: yes
+  tasks:
+    - name: Install Apache web server
+      apt:
+        name: apache2
+        state: present
+
+    - name: Configure hostname
+      hostname:
+        name: "{{ fqdn }}"
+
+    - name: Update /etc/hosts file
+      lineinfile:
+        dest: /etc/hosts
+        line: "{{ hostvars[inventory_hostname]['ansible_' + 'default_ipv4']['address'] }} {{ fqdn }} {{ inventory_hostname }}"
+      when: "'{{ fqdn }}' != '{{ inventory_hostname }}'"
+
+    - name: Restart Apache web server
+      service:
+        name: apache2
+        state: restarted
